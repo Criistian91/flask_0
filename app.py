@@ -1,5 +1,5 @@
 #Servidor
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from markupsafe import escape
 
 # Crear una instancia de la aplicación Flask
@@ -32,13 +32,24 @@ def usuario_by_id(id):
 def no_hacer(nombre):
     return escape(nombre)
 
+# GET todos los recursos
 @app.route('/recurso', methods = ['GET'])
 def get_recursos():
     return jsonify({"data": "lista de todos los items de este recurso"})
 
+# POST nuevo recurso
 @app.route('/recurso', methods = ['POST'])
 def post_recursos():
-    return jsonify({"data": "recurso creado"})
+    print(request.get_json())
+    # body es el diccionario
+    body = request.get_json()
+    name = body()["name"]
+    modelo = body()["modelo"]
+    # insertar en la BD
+    return jsonify({"recurso": {
+        "name": name,
+        "modelo": modelo
+    }})
 
 
 
